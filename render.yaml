@@ -1,7 +1,6 @@
 services:
   - type: web
     name: x-notify-bot
-    runtime: python3.10
+    env: docker
     repo: https://github.com/himanka009/x-notify-bot
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    plan: free
