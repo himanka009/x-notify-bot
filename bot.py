@@ -291,12 +291,46 @@ else:
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_error_handler(error_handler)
 
-async def _main():
-    # start the bot
+# --- replace your current __main__ / startup with this block ---
+import asyncio
+import signal
+
+async def start_bot():
     await app.initialize()
     await app.start()
     logger.info("Bot started. Listening for updates.")
-    # start background tracker task AFTER app is running
+
+    # start tracker AFTER app is running
     app.create_task(tracker_loop(app))
-    # Run until stopped (use start_polling via the Updater API)
-    await app.updater.start_polling()  # runs until stopped
+
+    # start polling
+    await app.updater.start_polling()
+    logger.info("Updater polling started.")
+
+    # block until termination signal from Railway (SIGTERM) or Ctrl-C
+    stop_event = asyncio.Event()
+    def _stop(*_):
+        stop_event.set()
+
+    loop = asyncio.get_running_loop()
+    try:
+        loop.add_signal_handler(signal.SIGTERM, _stop)
+        loop.add_signal_handler(signal.SIGINT, _stop)
+    except NotImplementedError:
+        # some platforms (Windows) don't support add_signal_handler; ignore
+        pass
+
+    await stop_event.wait()
+
+    # graceful shutdown
+    logger.info("Shutdown signal received. Stopping app...")
+    await app.updater.stop_polling()
+    await app.stop()
+    await app.shutdown()
+    logger.info("Bot stopped cleanly.")
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(start_bot())
+    except Exception:
+        logger.exception("Fatal error in main")
