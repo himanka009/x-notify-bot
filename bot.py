@@ -136,9 +136,13 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------------------- RUN BOT ----------------------
 import os
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
-TOKEN = os.getenv("BOT_TOKEN")
-print("Loaded Token:", TOKEN)
+# Yahan pe env se mat lo abhi
+# TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = "8397659162:AAEZdy9bcTvuhJr4a1kzmlr-8pFLNFh4PPA"  # <-- yahan paste kar
+
+print("Loaded Token:", TOKEN)  # sirf test ke liye, deploy ke baad hata sakta hai
 
 app = ApplicationBuilder().token(TOKEN).build()
 
