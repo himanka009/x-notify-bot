@@ -1,4 +1,3 @@
-print("Loaded Token:", TOKEN)
 import json
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -139,7 +138,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 import os
 
 TOKEN = os.getenv("BOT_TOKEN")
-
+print("Loaded Token:", TOKEN)
 
 app = ApplicationBuilder().token(TOKEN).build()
 
