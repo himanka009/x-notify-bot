@@ -1,3 +1,4 @@
+print("Loaded Token:", TOKEN)
 import json
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
