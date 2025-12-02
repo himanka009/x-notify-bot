@@ -291,16 +291,12 @@ else:
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_error_handler(error_handler)
 
-    async def _main():
-        # start background tracker task
-        app.create_task(tracker_loop(app))
-        # start the bot
-        await app.initialize()
-        await app.start()
-        logger.info("Bot started. Listening for updates.")
-        # Run until stopped
-        await app.updater.start_polling()  # runs until stopped
-
-    if __name__ == "__main__":
-        # run the async main loop
-        asyncio.run(_main())
+async def _main():
+    # start the bot
+    await app.initialize()
+    await app.start()
+    logger.info("Bot started. Listening for updates.")
+    # start background tracker task AFTER app is running
+    app.create_task(tracker_loop(app))
+    # Run until stopped (use start_polling via the Updater API)
+    await app.updater.start_polling()  # runs until stopped
