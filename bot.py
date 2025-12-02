@@ -135,8 +135,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg)
 
 # ---------------------- RUN BOT ----------------------
+import os
 
-TOKEN = os.getenv(8397659162:AAEZdy9bcTvuhJr4a1kzmlr-8pFLNFh4PPA)
+TOKEN = os.getenv("BOT_TOKEN")
+
 
 app = ApplicationBuilder().token(TOKEN).build()
 
